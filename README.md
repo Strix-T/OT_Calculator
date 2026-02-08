@@ -1,3 +1,43 @@
+# Timecard OT Calculator PWA
+
+Screenshot → hours → OT math. Upload a timecard screenshot, parse the **Total Hours** column via OpenAI Vision, edit hours, and calculate regular/OT pay with triple/quad modes.
+
+## Quick start
+
+```bash
+npm install
+npm run dev
+```
+
+Open http://localhost:3000.
+
+## Environment
+
+Copy `.env.example` to `.env.local` and fill your values:
+
+- `OPENAI_API_KEY` – server-side only
+- `ALLOWED_USER_IDS` – comma list, validated on the API route
+- `OPENAI_VISION_MODEL` – e.g. `gpt-4o-mini`
+- `NEXT_PUBLIC_ALLOWED_USER_IDS` – optional UI gate mirror of `ALLOWED_USER_IDS`
+
+## Deploy (Vercel + custom domain)
+
+See `docs/deploy/vercel.md` for step-by-step instructions to deploy and point `danycp.com` at the app.
+
+## Architecture
+
+- Next.js App Router + TypeScript + Tailwind
+- PWA via `next-pwa` (`next.config.mjs`, manifest + icons in `public/`)
+- API route: `app/api/parse-timecard/route.ts` (calls OpenAI Responses API with vision)
+- Calculation engine: `lib/calc.ts` (threshold 9.5h, triple=1.5×, quad=2.5×)
+- Client UI: `app/page.tsx` with `TimecardUploader`, `ResultsTable`, `MoneySummary`
+
+## Commands
+
+- `npm run dev` – start dev server
+- `npm run build` – production build
+- `npm run start` – run production build
+- `npm run lint` – lint sources
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
