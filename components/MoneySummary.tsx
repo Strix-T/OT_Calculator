@@ -12,15 +12,38 @@ type Props = {
 export default function MoneySummary({ calc, mode, payRate, taxPercent }: Props) {
   const thresholdLabel = calc.threshold.toFixed(1);
 
-  const items = [
+  const regularItems = [
     { label: "Regular pay", value: calc.totals.regularPay },
-    { label: `${thresholdLabel} pay`, value: calc.totals.overtimePay },
     { label: "Regular tax", value: calc.totals.regularTax },
-    { label: `${thresholdLabel} tax`, value: calc.totals.overtimeTax },
     { label: "Regular total", value: calc.totals.regularTotal },
-    { label: `${thresholdLabel} total`, value: calc.totals.overtimeTotal },
-    { label: "Net total", value: calc.totals.netTotal, highlight: true, fullWidth: true },
   ];
+
+  const overtimeItems = [
+    { label: `${thresholdLabel} pay`, value: calc.totals.overtimePay },
+    { label: `${thresholdLabel} tax`, value: calc.totals.overtimeTax },
+    { label: `${thresholdLabel} total`, value: calc.totals.overtimeTotal },
+  ];
+
+  const netItem = { label: "Net total", value: calc.totals.netTotal, highlight: true };
+
+  const Row = ({
+    label,
+    value,
+    highlight,
+  }: {
+    label: string;
+    value: number;
+    highlight?: boolean;
+  }) => (
+    <div
+      className={`flex items-center justify-between rounded border px-3 py-2 ${
+        highlight ? "border-black bg-black text-white" : "border-gray-200 bg-gray-50 text-gray-800"
+      }`}
+    >
+      <span>{label}</span>
+      <span className="font-semibold tabular-nums">${value.toFixed(2)}</span>
+    </div>
+  );
 
   return (
     <section className="space-y-3 rounded-lg border bg-white p-4 shadow-sm">
@@ -37,19 +60,21 @@ export default function MoneySummary({ calc, mode, payRate, taxPercent }: Props)
       </div>
 
       <div className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-2">
-        {items.map((item) => (
-          <div
-            key={item.label}
-            className={`flex items-center justify-between rounded border px-3 py-2 ${
-              item.highlight
-                ? "border-black bg-black text-white"
-                : "border-gray-200 bg-gray-50 text-gray-800"
-            } ${item.fullWidth ? "sm:col-span-2" : ""}`}
-          >
-            <span>{item.label}</span>
-            <span className="font-semibold tabular-nums">${item.value.toFixed(2)}</span>
-          </div>
-        ))}
+        <div className="space-y-2">
+          {regularItems.map((item) => (
+            <Row key={item.label} label={item.label} value={item.value} />
+          ))}
+        </div>
+
+        <div className="space-y-2">
+          {overtimeItems.map((item) => (
+            <Row key={item.label} label={item.label} value={item.value} />
+          ))}
+        </div>
+
+        <div className="sm:col-span-2">
+          <Row label={netItem.label} value={netItem.value} highlight={netItem.highlight} />
+        </div>
       </div>
     </section>
   );

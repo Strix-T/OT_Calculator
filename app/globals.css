@@ -6,6 +6,12 @@
   color-scheme: light;
 }
 
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   @apply bg-gray-50 text-gray-900 antialiased;
 }
@@ -15,4 +21,13 @@ button,
 textarea,
 select {
   @apply outline-none;
+}
+
+/* Prevent iOS Safari input-focus zoom (it zooms when font-size < 16px). */
+@media (max-width: 640px) {
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
 }

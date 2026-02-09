@@ -56,7 +56,7 @@ export default function TimecardUploader(props: Props) {
         <label className="space-y-1">
           <span className="text-sm font-medium">User ID (required)</span>
           <input
-            className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-black focus:ring-1 focus:ring-black"
+            className="w-full rounded border border-gray-300 px-3 py-2 text-base focus:border-black focus:ring-1 focus:ring-black sm:text-sm"
             value={userId}
             onChange={(e) => onUserIdChange(e.target.value)}
             placeholder="e.g., 1234"
@@ -66,7 +66,7 @@ export default function TimecardUploader(props: Props) {
         <label className="space-y-1">
           <span className="text-sm font-medium">Pay rate ($/hr)</span>
           <input
-            className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-black focus:ring-1 focus:ring-black"
+            className="w-full rounded border border-gray-300 px-3 py-2 text-base focus:border-black focus:ring-1 focus:ring-black sm:text-sm"
             type="number"
             step="0.01"
             min="0"
@@ -80,7 +80,7 @@ export default function TimecardUploader(props: Props) {
         <label className="space-y-1">
           <span className="text-sm font-medium">Tax %</span>
           <input
-            className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-black focus:ring-1 focus:ring-black"
+            className="w-full rounded border border-gray-300 px-3 py-2 text-base focus:border-black focus:ring-1 focus:ring-black sm:text-sm"
             type="number"
             step="0.01"
             min="0"
@@ -123,7 +123,7 @@ export default function TimecardUploader(props: Props) {
             type="file"
             accept="image/*"
             onChange={handleFile}
-            className="w-full text-sm"
+            className="w-full text-base sm:text-sm"
           />
         </label>
         <div className="flex items-end">
