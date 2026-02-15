@@ -155,8 +155,8 @@ export default function Page() {
      }
    };
 
-   return (
-     <main className="mx-auto flex min-h-screen max-w-5xl flex-col gap-4 p-4 sm:p-6">
+  return (
+    <main className="mx-auto flex min-h-screen max-w-5xl flex-col gap-4 p-4 sm:p-6 pb-[calc(2rem+env(safe-area-inset-bottom))]">
        <TimecardUploader
          userId={userId}
          payRate={payRate}
