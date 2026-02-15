@@ -125,7 +125,7 @@ export default function Page() {
        const json = await res.json();
 
        if (!res.ok) {
-         setError(json?.error ?? "Failed to parse screenshot.");
+         setError(json?.error ?? "Failed to submit screenshot.");
          setWarnings(Array.isArray(json?.warnings) ? json.warnings : []);
          return;
        }

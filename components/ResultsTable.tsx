@@ -48,13 +48,13 @@ export default function ResultsTable({
             disabled={!showReset}
             className="rounded border border-gray-300 px-3 py-2 text-sm font-medium hover:border-black disabled:opacity-50"
           >
-            Reset to parsed
+            Reset to submitted
           </button>
         </div>
       </div>
 
       {hours.length === 0 ? (
-        <p className="text-sm text-gray-600">Upload & parse an image to see results.</p>
+        <p className="text-sm text-gray-600">Upload & submit an image to see results.</p>
       ) : (
         <>
           {/* Mobile: avoid horizontal scrolling by using stacked rows */}

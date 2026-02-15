@@ -1,5 +1,6 @@
 import { PayMode } from "@/lib/types";
 import { ChangeEvent } from "react";
+import Image from "next/image";
 
 type Props = {
   userId: string;
@@ -47,9 +48,18 @@ export default function TimecardUploader(props: Props) {
 
   return (
     <section className="space-y-4 rounded-lg border bg-white p-4 shadow-sm">
-      <div>
-        <h1 className="text-xl font-semibold">Timecard OT Calculator</h1>
-        <p className="text-sm text-gray-600">Upload screenshot → parse hours → compute OT</p>
+      <div className="flex items-center gap-3">
+        <Image
+          src="/icons/DOT_logo.png"
+          alt="Timecard OT Calculator"
+          width={44}
+          height={44}
+          priority
+        />
+        <div>
+          <h1 className="text-xl font-semibold">Timecard OT Calculator</h1>
+          <p className="text-sm text-gray-600">Upload screenshot → submit → compute OT</p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -133,7 +143,7 @@ export default function TimecardUploader(props: Props) {
             disabled={!canParse || loading}
             className="inline-flex w-full items-center justify-center rounded-md bg-black px-4 py-2 text-sm font-medium text-white transition disabled:opacity-50"
           >
-            {loading ? "Reading image…" : "Parse Screenshot"}
+            {loading ? "Reading image…" : "Submit"}
           </button>
         </div>
       </div>
