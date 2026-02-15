@@ -69,6 +69,10 @@ export default function TimecardUploader(props: Props) {
         <div>
           <h1 className="text-xl font-semibold">Timecard OT Calculator</h1>
           <p className="text-sm text-gray-600">Upload image → submit → compute OT</p>
+          <p className="mt-1 text-xs text-amber-700">
+            Disclaimer: Never upload personal or sensitive information (e.g., SSN, address, bank info). Use a
+            redacted image.
+          </p>
         </div>
       </div>
 

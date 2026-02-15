@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { isAllowedUser } from "@/lib/auth";
+import { getClientIp, logRequest } from "@/lib/request-log";
 
 export const runtime = "nodejs";
 
@@ -18,11 +19,42 @@ function extractFirstJsonObject(text: string) {
 }
 
 export async function POST(req: Request) {
+  const requestId = globalThis.crypto?.randomUUID
+    ? globalThis.crypto.randomUUID()
+    : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+
   try {
     const form = await req.formData();
     const userId = String(form.get("userId") ?? "").trim();
 
-    if (!isAllowedUser(userId)) {
+    const allowed = isAllowedUser(userId);
+    const ip = getClientIp(req);
+    const userAgent = req.headers.get("user-agent") ?? undefined;
+
+    await logRequest({
+      ts: new Date().toISOString(),
+      event: "parse_timecard_attempt",
+      requestId,
+      path: "/api/parse-timecard",
+      method: "POST",
+      userId,
+      allowed,
+      ip,
+      userAgent,
+    });
+
+    if (!allowed) {
+      await logRequest({
+        ts: new Date().toISOString(),
+        event: "parse_timecard_unauthorized",
+        requestId,
+        path: "/api/parse-timecard",
+        method: "POST",
+        userId,
+        allowed: false,
+        ip,
+        userAgent,
+      });
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -139,6 +171,23 @@ export async function POST(req: Request) {
 
     const confidence = cleaned.length ? Math.min(0.9, 0.6 + cleaned.length * 0.05) : 0.2;
 
+    await logRequest({
+      ts: new Date().toISOString(),
+      event: "parse_timecard_success",
+      requestId,
+      path: "/api/parse-timecard",
+      method: "POST",
+      userId,
+      allowed: true,
+      ip,
+      userAgent,
+      extra: {
+        extractedRows: cleaned.length,
+        warnings: warnings.length,
+        confidence,
+      },
+    });
+
     return NextResponse.json({
       hours: cleaned,
       rawText: typeof parsedObj.rawText === "string" ? parsedObj.rawText : undefined,
@@ -146,6 +195,14 @@ export async function POST(req: Request) {
       confidence,
     });
   } catch (err: unknown) {
+    await logRequest({
+      ts: new Date().toISOString(),
+      event: "parse_timecard_error",
+      requestId,
+      path: "/api/parse-timecard",
+      method: "POST",
+      detail: err instanceof Error ? err.message : String(err),
+    });
     return NextResponse.json(
       { error: "Server error", detail: err instanceof Error ? err.message : String(err) },
       { status: 500 }

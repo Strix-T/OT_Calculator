@@ -2,6 +2,10 @@
 
 Screenshot → hours → OT math. Upload a timecard screenshot, parse the **Total Hours** column via OpenAI Vision, edit hours, and calculate regular/OT pay with triple/quad modes.
 
+## Privacy
+
+Never upload personal or sensitive information (e.g., SSN, address, bank info). Use redacted screenshots only.
+
 ## Quick start
 
 ```bash
