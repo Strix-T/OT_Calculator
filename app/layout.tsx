@@ -6,7 +6,7 @@ const siteUrl =
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Timecard OTTTT Calculator",
+  title: "Timecard 9.5 Calculator",
   description: "Screenshot → hours → OT pay with OpenAI vision.",
   manifest: "/manifest.webmanifest",
   icons: {
