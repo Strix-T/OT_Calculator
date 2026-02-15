@@ -1,5 +1,7 @@
+"use client";
+
 import { PayMode } from "@/lib/types";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 type Props = {
@@ -39,8 +41,16 @@ export default function TimecardUploader(props: Props) {
     onParse,
   } = props;
 
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!hasImage) setSelectedFileName(null);
+  }, [hasImage]);
+
   const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
+    setSelectedFileName(file?.name ?? null);
     onFileChange(file);
   };
 
@@ -58,7 +68,7 @@ export default function TimecardUploader(props: Props) {
         />
         <div>
           <h1 className="text-xl font-semibold">Timecard OT Calculator</h1>
-          <p className="text-sm text-gray-600">Upload screenshot → submit → compute OT</p>
+          <p className="text-sm text-gray-600">Upload image → submit → compute OT</p>
         </div>
       </div>
 
@@ -127,15 +137,31 @@ export default function TimecardUploader(props: Props) {
       </div>
 
       <div className="grid gap-3 sm:grid-cols-[2fr_1fr]">
-        <label className="space-y-1">
-          <span className="text-sm font-medium">Upload timecard screenshot</span>
+        <div className="space-y-2">
+          <div className="space-y-1">
+            <div className="text-sm font-medium">Timecard image</div>
+            <div className="text-xs text-gray-600">Choose an image or take a photo.</div>
+          </div>
+
+          <div>
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={loading}
+              className="w-full rounded border border-gray-300 px-3 py-2 text-sm font-medium hover:border-black disabled:opacity-50"
+            >
+              Choose image
+            </button>
+          </div>
+
           <input
+            ref={fileInputRef}
             type="file"
             accept="image/*"
             onChange={handleFile}
-            className="w-full text-base sm:text-sm"
+            className="hidden"
           />
-        </label>
+        </div>
         <div className="flex items-end">
           <button
             type="button"
@@ -146,6 +172,18 @@ export default function TimecardUploader(props: Props) {
             {loading ? "Reading image…" : "Submit"}
           </button>
         </div>
+      </div>
+
+      <div className="text-xs text-gray-600">
+        {selectedFileName ? (
+          <>
+            Selected: <span className="font-medium text-gray-800">{selectedFileName}</span>
+          </>
+        ) : hasImage ? (
+          "Selected: image"
+        ) : (
+          "No image selected"
+        )}
       </div>
 
       {error && (
@@ -172,7 +210,6 @@ export default function TimecardUploader(props: Props) {
           </ul>
         </div>
       )}
-
     </section>
   );
 }
