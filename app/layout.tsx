@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import InstallPrompt from "@/components/InstallPrompt";
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
@@ -59,6 +60,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="bg-gray-50 text-gray-900 font-sans">
         {children}
+        <InstallPrompt />
       </body>
     </html>
   );
